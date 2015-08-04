@@ -1,9 +1,18 @@
 var User = require('./models/User');
 
 module.exports = function(app) {
+	
+	app.get('/login', function(req, res){
+		// Render views/login.html
+		res.render('login');
+	});
 
 	// authenticate the given email/password pair
 	app.post('/auth', function(req, res) {
+		
+		console.log(req.body.email);
+		console.log(req.body.password);
+		
 		User.findOne({
 			email : req.body.email,
 			password : req.body.password
@@ -11,19 +20,18 @@ module.exports = function(app) {
 			if (err) {
 				res.json({
 					type : false,
-					data : "Error occured: " + err
+					token : null
 				});
 			} else {
 				if (user) {
 					res.json({
 						type : true,
-
 						token : user.token
 					});
 				} else {
 					res.json({
 						type : false,
-						data : "Incorrect email/password"
+						token : null
 					});
 				}
 			}
