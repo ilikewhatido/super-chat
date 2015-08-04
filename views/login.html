@@ -14,7 +14,7 @@
 		$('#chat-form').submit(function(event) {
 			event.preventDefault();
 			$.post("/auth", {
-				email : $('#email').val(),
+				name : $('#name').val(),
 				password : $('#password').val()
 			}, function(data, status) {
 				if(data.token !== null) {
@@ -32,8 +32,8 @@
 		<h2>Login</h2>
 		<form id="chat-form" role="form" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
-				<label for="email">Email:</label> <input type="email"
-					class="form-control" id="email" placeholder="Enter email">
+				<label for="name">Name:</label> <input type="name"
+					class="form-control" id="name" placeholder="Enter name">
 			</div>
 			<div class="form-group">
 				<label for="pwd">Password:</label> <input type="password"

@@ -7,14 +7,14 @@ module.exports = function(app) {
 		res.render('login');
 	});
 
-	// authenticate the given email/password pair
+	// authenticate the given name/password pair
 	app.post('/auth', function(req, res) {
 		
-		console.log(req.body.email);
+		console.log(req.body.name);
 		console.log(req.body.password);
 		
 		User.findOne({
-			email : req.body.email,
+			name : req.body.name,
 			password : req.body.password
 		}, function(err, user) {
 			if (err) {
@@ -41,7 +41,7 @@ module.exports = function(app) {
 	// create a new user
 	app.post('/user', function(req, res) {
 		User.findOne({
-			email : req.body.email,
+			name : req.body.name,
 			password : req.body.password
 		}, function(err, user) {
 			if (err) {
@@ -57,7 +57,7 @@ module.exports = function(app) {
 					});
 				} else {
 					var userModel = new User();
-					userModel.email = req.body.email;
+					userModel.name = req.body.name;
 					userModel.password = req.body.password;
 					userModel.save(function(err, user) {
 						user.token = jwt.sign(user, "super-chat-secret");
