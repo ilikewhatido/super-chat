@@ -18,9 +18,9 @@
 				password : $('#password').val()
 			}, function(data, status) {
 				if(data.token !== null) {
-					alert('not null');
+					alert(data.token);
 				} else {
-					alert('is null');
+					alert(data.token);
 				}
 			});
 		});

@@ -1,4 +1,5 @@
 var User = require('./models/User');
+var jwt = require("jsonwebtoken");
 
 module.exports = function(app) {
 	
@@ -38,23 +39,26 @@ module.exports = function(app) {
 		});
 	});
 
-	// create a new user
+	// Create a new user
 	app.post('/user', function(req, res) {
 		User.findOne({
 			name : req.body.name,
 			password : req.body.password
 		}, function(err, user) {
+			// Error
 			if (err) {
 				res.json({
 					type : false,
 					data : "Error occured: " + err
 				});
 			} else {
+				// User already exists
 				if (user) {
 					res.json({
 						type : false,
 						data : "User already exists!"
 					});
+				// Create a new user
 				} else {
 					var userModel = new User();
 					userModel.name = req.body.name;
