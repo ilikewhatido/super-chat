@@ -4,11 +4,6 @@ var jwt = require("jsonwebtoken");
 
 module.exports = function(app) {
 	
-	app.get('/login', function(req, res){
-		// Render views/login.html
-		res.render('login');
-	});
-
 	// authenticate the given name/password pair
 	app.post('/auth', function(req, res) {
 		User.findOne({

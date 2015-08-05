@@ -13,7 +13,7 @@
 	$(function() {
 		$('#chat-form').submit(function(event) {
 			event.preventDefault();
-			$.post("/auth", {
+			$.post("http://localhost:3002/auth", {
 				name : $('#name').val(),
 				password : $('#password').val()
 			}, function(data, status) {

@@ -4,7 +4,7 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var app = express();
 
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 3002;
 
 // Connect to DB
 mongoose.connect("mongodb://localhost:27017/super-chat");
@@ -21,22 +21,11 @@ app.use(function(req, res, next) {
 	next();
 });
 
-require('./routes.js')(app)
+require('./backend-routes.js')(app)
 
 process.on('uncaughtException', function(err) {
 	console.log(err);
 });
-
-//************************************************************************
-//Set .html as the default template extension
-app.set('view engine', 'html');
-// Initialize the ejs template engine
-app.engine('html', require('ejs').renderFile);
-//Tell express where it can find the templates
-app.set('views', __dirname + '/views');
-// Make the files in the public folder available to the world
-app.use(express.static(__dirname + '/public'));
-//************************************************************************
 
 //Start Server
 app.listen(port, function() {
