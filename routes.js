@@ -1,4 +1,5 @@
 var User = require('./models/User');
+var Message = require('./models/Message');
 var jwt = require("jsonwebtoken");
 
 module.exports = function(app) {
@@ -10,10 +11,6 @@ module.exports = function(app) {
 
 	// authenticate the given name/password pair
 	app.post('/auth', function(req, res) {
-		
-		console.log(req.body.name);
-		console.log(req.body.password);
-		
 		User.findOne({
 			name : req.body.name,
 			password : req.body.password
@@ -25,6 +22,7 @@ module.exports = function(app) {
 				});
 			} else {
 				if (user) {
+					console.log(user.token);
 					res.json({
 						type : true,
 						token : user.token
@@ -92,6 +90,52 @@ module.exports = function(app) {
 				res.json({
 					type : true,
 					data : user
+				});
+			}
+		});
+	});
+	
+	// post a message
+	app.post('/message', ensureAuthorized, function(req, res) {
+		User.findOne({
+			token : req.token
+		}, function(err, user) {
+			if (err) {
+				res.json({
+					type : false,
+					data : "Error occured: " + err
+				});
+			} else {
+				// save message
+				var messageModel = new Message();
+				messageModel.message = req.body.message;
+				messageModel.user_name = user.name;
+				messageModel.save(function(err, message) {
+					res.json({
+						type : true,
+						data : message
+					});
+				});
+			}
+		});
+	});
+	
+	app.get('/message', ensureAuthorized, function(req, res) {
+		User.findOne({
+			token : req.token
+		}, function(err, user) {
+			if (err) {
+				res.json({
+					type : false,
+					data : "Error occured: " + err
+				});
+			} else {
+				// find all messages
+				Message.find({}, function(err, messages) {
+					res.json({
+						type : true,
+						data : messages
+					});
 				});
 			}
 		});
