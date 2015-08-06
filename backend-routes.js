@@ -125,13 +125,20 @@ module.exports = function(app) {
 					data : "Error occured: " + err
 				});
 			} else {
-				// find all messages
-				Message.find({}, function(err, messages) {
-					res.json({
-						type : true,
-						data : messages
+				if (user) {
+					// find all messages
+					Message.find({}, function(err, messages) {
+						res.json({
+							type : true,
+							data : messages
+						});
 					});
-				});
+				} else {
+					res.json({
+						type : false,
+						data : null
+					});
+				}
 			}
 		});
 	});

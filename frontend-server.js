@@ -4,7 +4,9 @@ var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 var app = express();
 
+var http = require('http').Server(app);
 var port = process.env.PORT || 3001;
+var io = require('socket.io')(http);
 
 app.use(bodyParser.urlencoded({
 	extended : true
@@ -32,7 +34,21 @@ app.get('/login', function(req, res){
 	res.render('login');
 });
 
-//Start Server
-app.listen(port, function() {
-	console.log("Express server listening on port " + port);
+app.get('/chat', function(req, res){
+	// Render views/chat.html
+	res.render('chat');
+});
+
+io.on('connection', function(socket) {
+	console.log('a user connected');
+	socket.on('disconnect', function(){
+	    console.log('user disconnected');
+	});
+	socket.on('user login', function(msg){
+	    console.log('user login: ' + msg);
+	});
+});
+
+http.listen(3001, function() {
+	console.log('listening on *:3001');
 });

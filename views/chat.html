@@ -7,9 +7,42 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+  <script>
+    var socket = io();
+  </script>
 </head>
-<body>
 
+<script>
+$(function() {
+	
+	var messageList = $('#messages');
+	
+	$.ajax({
+	    url: "http://localhost:3002/message",
+	    type: 'post',
+	    headers: {
+	    	authorization : getCookie("token")
+	    },
+	    success: function(data, status) {
+	    	console.log(data.data);
+	    }
+	});
+});
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+    }
+    return "";
+}
+</script>
+
+<body>
 <div class="container">
   
   <ul class="list-group" id="messages">

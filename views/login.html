@@ -7,9 +7,13 @@
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
 </head>
 
 <script>
+    var socket = io();
+    
 	$(function() {
 		$('#chat-form').submit(function(event) {
 			event.preventDefault();
@@ -17,10 +21,20 @@
 				name : $('#name').val(),
 				password : $('#password').val()
 			}, function(data, status) {
+				
+				// success
 				if(data.token !== null) {
-					alert(data.token);
+					// emit user login
+					socket.emit('user login', $('#name').val());
+					
+					// store token in cookie
+					document.cookie="token=" + data.token;
+					
+					// redirect to the chat html
+					window.location.replace("http://localhost:3001/chat");
+				// fail
 				} else {
-					alert(data.token);
+					//alert(data.token);
 				}
 			});
 		});
