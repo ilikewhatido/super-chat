@@ -41,11 +41,17 @@ app.get('/chat', function(req, res){
 
 io.on('connection', function(socket) {
 	console.log('a user connected');
+	
 	socket.on('disconnect', function(){
 	    console.log('user disconnected');
 	});
+	
 	socket.on('user login', function(msg){
 	    console.log('user login: ' + msg);
+	});
+	
+	socket.on('user chat', function(data){
+	    console.log('user chat: ' + data.message);
 	});
 });
 

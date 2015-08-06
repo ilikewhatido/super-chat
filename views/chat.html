@@ -8,25 +8,32 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-  <script>
-    var socket = io();
-  </script>
 </head>
 
 <script>
 $(function() {
 	
+	var socket = io();
 	var messageList = $('#messages');
 	
 	$.ajax({
 	    url: "http://localhost:3002/message",
-	    type: 'post',
+	    type: 'get',
 	    headers: {
 	    	authorization : getCookie("token")
 	    },
 	    success: function(data, status) {
-	    	console.log(data.data);
+	    	var messages = data.data;
+	    	for(i = 0; i < messages.length; i++) {
+	    		//console.log(messages[i].message);
+	    		messageList.append('<li> ' + messages[i].user_name + messages[i].message + '</li>');
+	    	}
 	    }
+	});
+	
+	$('#chat-form').submit(function(event) {
+		event.preventDefault();
+		socket.emit('user chat', {user : getCookie("user_name"), message : $('#chat-message').val()});
 	});
 });
 
@@ -40,6 +47,7 @@ function getCookie(cname) {
     }
     return "";
 }
+
 </script>
 
 <body>
@@ -47,9 +55,9 @@ function getCookie(cname) {
   
   <ul class="list-group" id="messages">
   </ul>
-  <form class="form-inline" role="form">
+  <form class="form-inline" role="form" id="chat-form">
     <div class="form-group">
-      <input type="text" class="form-control" id="pwd">
+      <input type="text" class="form-control" id="chat-message">
     </div>
     <button type="submit" class="btn btn-default">Submit</button>
   </form>

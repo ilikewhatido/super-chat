@@ -15,7 +15,7 @@
     var socket = io();
     
 	$(function() {
-		$('#chat-form').submit(function(event) {
+		$('#login-form').submit(function(event) {
 			event.preventDefault();
 			$.post("http://localhost:3002/auth", {
 				name : $('#name').val(),
@@ -29,6 +29,7 @@
 					
 					// store token in cookie
 					document.cookie="token=" + data.token;
+					document.cookie="user_name=" + $('#name').val();
 					
 					// redirect to the chat html
 					window.location.replace("http://localhost:3001/chat");
@@ -44,7 +45,7 @@
 <body>
 	<div class="container">
 		<h2>Login</h2>
-		<form id="chat-form" role="form" enctype="application/x-www-form-urlencoded">
+		<form id="login-form" role="form" enctype="application/x-www-form-urlencoded">
 			<div class="form-group">
 				<label for="name">Name:</label> <input type="name"
 					class="form-control" id="name" placeholder="Enter name">
